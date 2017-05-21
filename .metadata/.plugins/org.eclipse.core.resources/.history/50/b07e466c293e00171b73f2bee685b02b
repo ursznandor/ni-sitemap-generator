@@ -1,0 +1,22 @@
+package generator_ni;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+public class SitemapGenerator {
+	
+	public static void main(String[] args){
+		
+		System.setProperty("webdriver.gecko.driver", "geckodriver.exe");
+		WebDriver driver = new FirefoxDriver();
+		driver.get("http://wikipedia.org");
+		WebElement searchBox;
+		searchBox = driver.findElement(By.id("searchInput"));
+		searchBox.sendKeys("burgonya");
+		Thread.sleep(5000);
+		driver.quit();
+	}
+
+}
