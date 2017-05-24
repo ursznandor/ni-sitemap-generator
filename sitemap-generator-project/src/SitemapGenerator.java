@@ -19,8 +19,47 @@ public class SitemapGenerator {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		
+		System.setProperty("webdriver.gecko.driver", "geckodriver.exe");
+		WebDriver driver = new FirefoxDriver();
+		driver.get("https://vidazoldseges.hu");
+		
+		int level = 1;
+		
+		ArrayList< ArrayList<String> > linkTree = new ArrayList<>();
+	 
+		ArrayList<WebElement> elements = (ArrayList<WebElement>) driver.findElements(By.tagName("a"));
+		
+		linkTree.add(getLinks(elements));
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for (int i = 0; i < level; ++i) {
+			ArrayList<String> currentLevel = linkTree.get(i);
+			ArrayList<String> newLevel = new ArrayList<>();
+			for (String link : currentLevel) {
+				if (link.startsWith("https")) {
+					driver.get(link);
+					newLevel.addAll(getLinks((ArrayList<WebElement>) driver.findElements(By.tagName("a"))));
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			linkTree.add(newLevel);
+		}
+		
+		for (String link : linkTree.get(level)) {
+			System.out.println(link);
+		}
 	}
 
 }
