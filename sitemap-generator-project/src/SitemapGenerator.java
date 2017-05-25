@@ -18,7 +18,7 @@ public class SitemapGenerator {
 		return level;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		System.setProperty("webdriver.gecko.driver", "geckodriver.exe");
 		WebDriver driver = new FirefoxDriver();
@@ -26,14 +26,15 @@ public class SitemapGenerator {
 		
 		int level = 1;
 		
+		ArrayList<String> links = new ArrayList<>();
+		
 		ArrayList< ArrayList<String> > linkTree = new ArrayList<>();
-	 
 		ArrayList<WebElement> elements = (ArrayList<WebElement>) driver.findElements(By.tagName("a"));
 		
 		linkTree.add(getLinks(elements));
 		
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,11 +44,26 @@ public class SitemapGenerator {
 			ArrayList<String> currentLevel = linkTree.get(i);
 			ArrayList<String> newLevel = new ArrayList<>();
 			for (String link : currentLevel) {
-				if (link.startsWith("https")) {
+				if (link.startsWith("http")) {
 					driver.get(link);
+					
+					FileWriter fw = new FileWriter("sitemap.txt");
+			        PrintWriter pw = new PrintWriter(fw);
+						if(!links.contains(link)) {
+							links.add(link);
+						}
+							else{
+								System.err.println("Duplicated link!");
+							}
+						
+						for(String linklist: links){
+							pw.println(linklist);
+						}
+						pw.close();
+
 					newLevel.addAll(getLinks((ArrayList<WebElement>) driver.findElements(By.tagName("a"))));
 					try {
-						Thread.sleep(5000);
+						Thread.sleep(2000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
