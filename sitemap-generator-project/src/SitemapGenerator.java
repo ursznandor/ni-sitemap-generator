@@ -26,7 +26,6 @@ public class SitemapGenerator {
 
 	public static void main(String[] args) throws IOException, FileNotFoundException {
 		
-		System.setProperty("webdriver.gecko.driver", "chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		
 		try{
@@ -97,5 +96,8 @@ public class SitemapGenerator {
 		}catch (NotEnoughElement err){
 			System.out.println(err.toString());
 		}
+		
+		driver.close();
+		driver.quit();
 	}
 }
