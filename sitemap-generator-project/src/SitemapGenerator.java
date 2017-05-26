@@ -1,9 +1,15 @@
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 public class SitemapGenerator {
 	
@@ -18,13 +24,22 @@ public class SitemapGenerator {
 		return level;
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, FileNotFoundException {
 		
-		System.setProperty("webdriver.gecko.driver", "geckodriver.exe");
-		WebDriver driver = new FirefoxDriver();
-		driver.get("https://vidazoldseges.hu");
+		System.setProperty("webdriver.gecko.driver", "chromedriver.exe");
+		WebDriver driver = new ChromeDriver();
 		
-		int level = 1;
+		try{
+			FileReader fr = new FileReader("linkAndLevel.txt");
+			Scanner sc = new Scanner(fr);
+			String[]str = sc.nextLine().split(";");
+			sc.close();
+			
+			if(str.length !=2) {
+				throw new NotEnoughElement();
+			}
+			driver.get(str[0]);
+			int level = Integer.parseInt(str[1]);
 		
 		ArrayList<String> links = new ArrayList<>();
 		
@@ -36,7 +51,7 @@ public class SitemapGenerator {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -65,7 +80,7 @@ public class SitemapGenerator {
 					try {
 						Thread.sleep(2000);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 				}
@@ -76,6 +91,11 @@ public class SitemapGenerator {
 		for (String link : linkTree.get(level)) {
 			System.out.println(link);
 		}
+		
+		}catch (FileNotFoundException err){
+			System.out.println("File (linkAndLevel.txt) not found!");
+		}catch (NotEnoughElement err){
+			System.out.println(err.toString());
+		}
 	}
-
 }
