@@ -7,7 +7,7 @@
 SiteMapGenerator requires [Selenium Webdriver Plugins](http://selenium-release.storage.googleapis.com/3.4/selenium-java-3.4.0.zip)  to run.
 
 # CHANGELOG
-### [V1.0](https://github.com/ursznandor/ni-sitemap-generator/releases/tag/v1.1)
+### [V1.1](https://github.com/ursznandor/ni-sitemap-generator/releases/tag/v1.1)
 
   - added FileReader function
   - added exception handling
